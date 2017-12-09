@@ -25,7 +25,7 @@ namespace ipmt.Utils
         
         public static void WriteToDummyFile(string txt)
         {
-            using (StreamWriter sw = new StreamWriter(new FileStream("dummy.txt", FileMode.OpenOrCreate), Encoding.Unicode))
+            using (StreamWriter sw = new StreamWriter(new FileStream("dummy.txt", FileMode.OpenOrCreate), Encoding.UTF7))
             {
                     sw.Write(txt);
             }
@@ -33,7 +33,7 @@ namespace ipmt.Utils
 
         public static string ReadFromDummyFile()
         {
-            using (StreamReader sr = new StreamReader("dummy.txt", Encoding.Unicode))
+            using (StreamReader sr = new StreamReader("dummy.txt", Encoding.UTF7 ))
             {
                 return sr.ReadToEnd();
             }
