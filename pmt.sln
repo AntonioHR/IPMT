@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pmt", "src\pmt.csproj", "{18AB9BE2-CB93-495A-B29F-C504482B976D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		aho_test_0|Any CPU = aho_test_0|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		kmp_test_0|Any CPU = kmp_test_0|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Test_0|Any CPU = Test_0|Any CPU
+		test_big_d|Any CPU = test_big_d|Any CPU
+		test_big|Any CPU = test_big|Any CPU
+		test_sellers|Any CPU = test_sellers|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.aho_test_0|Any CPU.ActiveCfg = aho_test_0|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.aho_test_0|Any CPU.Build.0 = aho_test_0|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.kmp_test_0|Any CPU.ActiveCfg = cli|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.kmp_test_0|Any CPU.Build.0 = cli|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.Test_0|Any CPU.ActiveCfg = Test_0|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.Test_0|Any CPU.Build.0 = Test_0|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.test_big_d|Any CPU.ActiveCfg = test_big_d|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.test_big_d|Any CPU.Build.0 = test_big_d|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.test_big|Any CPU.ActiveCfg = test_big|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.test_big|Any CPU.Build.0 = test_big|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.test_sellers|Any CPU.ActiveCfg = test_sellers|Any CPU
+		{18AB9BE2-CB93-495A-B29F-C504482B976D}.test_sellers|Any CPU.Build.0 = test_sellers|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {740B4C01-2981-4A55-AF0F-5F6DBB5FC49B}
+	EndGlobalSection
+EndGlobal
