@@ -106,6 +106,8 @@
     <Compile Include="Engine\Huffman\HuffmanTree.cs" />
     <Compile Include="Engine\ResultHandler.cs" />
     <Compile Include="Utils\BitArrayUtils.cs" />
+    <Compile Include="Utils\BitStringBuilder.cs" />
+    <Compile Include="Utils\BitStringReader.cs" />
     <Compile Include="Utils\MinHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

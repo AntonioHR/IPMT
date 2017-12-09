@@ -1,4 +1,5 @@
-﻿using ipmt.Utils.MinMaxHeap;
+﻿using ipmt.Utils;
+using ipmt.Utils.MinMaxHeap;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -59,6 +60,35 @@ namespace ipmt.Engine.Huffman
             }
 
             return builder.ToString();
+        }
+
+        internal string Decode(string encoded)
+        {
+            char[] split = { '\n' };
+            var countAndText = encoded.Split(split, 2);
+
+            int size = int.Parse(countAndText[0]);
+            return Decode(countAndText[1], size);
+
+        }
+        public string Decode(string encoded, int size)
+        {
+            BitStringReader reader = new BitStringReader(encoded);
+            StringBuilder sb = new StringBuilder(encoded.Length * 5);
+            Node curr = Top;
+
+            for (int i = 0; i < size; i++)
+            {
+                if (curr.isLeaf)
+                {
+                    sb.Append(curr.character);
+                    curr = Top;
+                }
+                curr = reader.ReadBit() ? curr.left : curr.right;
+            }
+            sb.Append(curr.character);
+
+            return sb.ToString();
         }
 
         internal string DecodeFromDebugString(string encoded)

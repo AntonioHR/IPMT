@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,35 @@ namespace ipmt.Utils
                 result.Add(chars[i], freqs[i]);
             }
             return new FrequencyMap(result);
+        }
+        
+        public static void WriteToDummyFile(string txt)
+        {
+            using (StreamWriter sw = new StreamWriter(new FileStream("dummy.txt", FileMode.OpenOrCreate), Encoding.Unicode))
+            {
+                    sw.Write(txt);
+            }
+        }
+
+        public static string ReadFromDummyFile()
+        {
+            using (StreamReader sr = new StreamReader("dummy.txt", Encoding.Unicode))
+            {
+                return sr.ReadToEnd();
+            }
+        }
+
+        public static string ReadFromFile(Encoding encoding, string name = "text.txt")
+        {
+            using (StreamReader sr = new StreamReader(name, encoding))
+            {
+                return sr.ReadToEnd();
+            }
+        }
+
+        internal static void WriteSeparator(string v)
+        {
+            Console.WriteLine(string.Format("-----------------------------------------------------{0}--------------------------------------", v));
         }
     }
 }

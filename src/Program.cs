@@ -23,7 +23,8 @@ namespace ipmt
 
         private static void HuffmanTest()
         {
-            string txt = "Ramona Lisa says: 'Dominic, you and me are a perfect disaster'";
+            //string txt = "Ramona Lisa says: 'Dominic, you and me are a perfect disaster'";
+            string txt = TestUtils.ReadFromFile(Encoding.Unicode, "test.txt") ;
             FrequencyMap freqMap = new FrequencyMap(txt);
             //char[] chrs = { 'a', 'b', 'c', 'd', 'e', 'f' };
             //int[] freqs = { 5, 9, 12, 13, 16, 45 };
@@ -34,8 +35,15 @@ namespace ipmt
             HuffmanTree tree = new HuffmanTree(freqMap);
             HuffmanEncoding encoding = new HuffmanEncoding(tree);
 
-            string encoded = encoding.EncodeAsDebugString(txt);
-            string decoded = tree.DecodeFromDebugString(encoded);
+            string debugEncoded = encoding.EncodeAsDebugString(txt);
+            string realEncoded = encoding.Encode(txt);
+
+            TestUtils.WriteToDummyFile(realEncoded);
+            string encodedReadFromFile = TestUtils.ReadFromDummyFile();
+
+            string debugDecoded = tree.DecodeFromDebugString(debugEncoded);
+            string realDecoded = tree.Decode(realEncoded);
+            string realDecodedFromFile = tree.Decode(encodedReadFromFile);
 
 
             Console.WriteLine("Encoding");
@@ -43,12 +51,22 @@ namespace ipmt
             Console.WriteLine("Tree");
             Console.WriteLine(tree.SerializeToString());
 
-            Console.WriteLine("Encoded text");
-            Console.WriteLine(encoded);
+            TestUtils.WriteSeparator("Encoded Text");
+            Console.WriteLine(debugEncoded);
 
-            Console.WriteLine("Decoded text");
-            Console.WriteLine(decoded);
+            TestUtils.WriteSeparator("Compressed Encoding");
+            Console.WriteLine(realEncoded);
+
+            TestUtils.WriteSeparator("Debug Decoded text");
+            Console.WriteLine(debugDecoded);
+            
+            TestUtils.WriteSeparator("Real Decoded text");
+            Console.WriteLine(realDecoded);
+
+            TestUtils.WriteSeparator("Real Decoded text, read from file");
+            Console.WriteLine(realDecodedFromFile);
         }
+
 
         private static void PrintOptsAndFiles(CommandDescription c)
         {

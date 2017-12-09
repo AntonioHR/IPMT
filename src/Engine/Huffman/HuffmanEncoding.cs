@@ -48,5 +48,21 @@ namespace ipmt.Engine.Huffman
 
             return builder.ToString();
         }
+
+        internal string Encode(string txt)
+        {
+            BitStringBuilder builder = new BitStringBuilder(txt.Length / 3);
+
+            for (int i = 0; i < txt.Length; i++)
+            {
+                BitArray ba = this[txt[i]];
+                for (int j = 0; j < ba.Length; j++)
+                {
+                    builder.WriteBit(ba[j]);
+                }
+            }
+
+            return builder.End();
+        }
     }
 }
