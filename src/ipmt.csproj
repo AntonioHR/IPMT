@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{18AB9BE2-CB93-495A-B29F-C504482B976D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>pmt</RootNamespace>
-    <AssemblyName>pmt</AssemblyName>
+    <RootNamespace>ipmt</RootNamespace>
+    <AssemblyName>ipmt</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -96,15 +96,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\AhoCorasick\AhoCorasickMatchCommand.cs" />
-    <Compile Include="Engine\BruteForce\BruteForceMatchCommand.cs" />
     <Compile Include="Engine\Command.cs" />
     <Compile Include="Engine\CommandDescription.cs" />
+    <Compile Include="Engine\Commands\BuildIndexCommand.cs" />
+    <Compile Include="Engine\Commands\MultiTextCommand.cs" />
+    <Compile Include="Engine\Commands\StringMatchCommand.cs" />
+    <Compile Include="Engine\Huffman\HuffmanEncoding.cs" />
+    <Compile Include="Engine\Huffman\FrequencyMap.cs" />
+    <Compile Include="Engine\Huffman\HuffmanTree.cs" />
     <Compile Include="Engine\ResultHandler.cs" />
-    <Compile Include="Engine\KMP\KMPMatchCommand.cs" />
-    <Compile Include="Engine\Sellers\SellersStringMatchCommand.cs" />
+    <Compile Include="Utils\BitArrayUtils.cs" />
+    <Compile Include="Utils\MinHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\TestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

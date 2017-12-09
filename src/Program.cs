@@ -1,4 +1,6 @@
 ﻿using ipmt.Engine;
+using ipmt.Engine.Huffman;
+using ipmt.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,9 +14,40 @@ namespace ipmt
     {
         static void Main(string[] args)
         {
-            CommandDescription c = CommandDescription.ParseFrom(args);
-            var cmd = Command.BuildFrom(c);
-            cmd.Execute();
+            HuffmanTest();
+
+            //CommandDescription c = CommandDescription.ParseFrom(args);
+            //var cmd = Command.BuildFrom(c);
+            //cmd.Execute();
+        }
+
+        private static void HuffmanTest()
+        {
+            string txt = "Ramona Lisa says: 'Dominic, you and me are a perfect disaster'";
+            FrequencyMap freqMap = new FrequencyMap(txt);
+            //char[] chrs = { 'a', 'b', 'c', 'd', 'e', 'f' };
+            //int[] freqs = { 5, 9, 12, 13, 16, 45 };
+
+            //FrequencyMap freqMap = TestUtils.DummyFrom(chrs, freqs);
+
+
+            HuffmanTree tree = new HuffmanTree(freqMap);
+            HuffmanEncoding encoding = new HuffmanEncoding(tree);
+
+            string encoded = encoding.EncodeAsDebugString(txt);
+            string decoded = tree.DecodeFromDebugString(encoded);
+
+
+            Console.WriteLine("Encoding");
+            Console.WriteLine(encoding.ToString);
+            Console.WriteLine("Tree");
+            Console.WriteLine(tree.SerializeToString());
+
+            Console.WriteLine("Encoded text");
+            Console.WriteLine(encoded);
+
+            Console.WriteLine("Decoded text");
+            Console.WriteLine(decoded);
         }
 
         private static void PrintOptsAndFiles(CommandDescription c)

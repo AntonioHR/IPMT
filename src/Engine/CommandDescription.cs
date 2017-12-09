@@ -8,17 +8,29 @@ namespace ipmt.Engine
 
     public class CommandDescription
     {
+        public enum OperationType
+        {
+            Index, Search, Help
+        }
+
         public enum OptionType
         {
-            Help, Edit, PatternFile, Algorithm, Count
+            PatternFile, Algorithm, Count
         }
 
         public enum AlgorithmType
         {
-            Default, BruteForce, KMP, AhoCorasick, Sellers
+            Default
         }
 
-        private static Dictionary<string, AlgorithmType> algos = new Dictionary<string, AlgorithmType> { { "bf", AlgorithmType.BruteForce }, { "kmp", AlgorithmType.KMP }, {"aho", AlgorithmType.AhoCorasick }, { "sel", AlgorithmType.Sellers} };
+
+        private static Dictionary<string, OperationType> OperationDictionary = new Dictionary<string, OperationType>
+        {
+            {"index", OperationType.Index}, {"search", OperationType.Search}, {"-h", OperationType.Help }
+        };
+
+        private static Dictionary<string, AlgorithmType> algos = new Dictionary<string, AlgorithmType> {
+        };
 
 
         List<OptionType> opts = new List<OptionType>();
@@ -26,6 +38,7 @@ namespace ipmt.Engine
 
 
         public AlgorithmType Algorithm { get; private set; } = AlgorithmType.Default;
+        public OperationType Operation { get; private set; }
         public int EditDistance { get; private set; } = 0;
         public string Patternfile { get; private set; }
         public string Pattern { get; private set; }
@@ -35,46 +48,52 @@ namespace ipmt.Engine
         {
             return opts.Contains(type);
         }
-        public bool IsExactMatching
+        public bool IsHelp
         {
             get
             {
-                return Algorithm == AlgorithmType.BruteForce
-                    || Algorithm == AlgorithmType.KMP
-                    || Algorithm== AlgorithmType.AhoCorasick;
+                return Operation == OperationType.Help; 
             }
         }
+        
 
-        public static CommandDescription ParseFrom(string[] commands)
+        public static CommandDescription ParseFrom(string[] tokens)
         {
             CommandDescription result = new CommandDescription();
 
             int i = 0;
 
-            while (i < commands.Length)
+            //Read Command Type
+            result.Operation = OperationDictionary[tokens[i]];
+            i++;
+
+            //Read All Options
+            while (i < tokens.Length)
             {
-                if (commands[i][0] != '-')
+                if (tokens[i][0] != '-')
                     break;
-                ReadOption(ref commands, ref i, result);
+                ReadOption(ref tokens, ref i, result);
                 i++;
             }
 
-            if (i < commands.Length)
+            //Add Pattern or Pattern File
+            if (i < tokens.Length)
             {
                 if (result.Contains(OptionType.PatternFile))
                 {
-                    result.Patternfile = commands[i];
+                    result.Patternfile = tokens[i];
                 }
                 else
                 {
-                    result.Pattern = commands[i];
+                    result.Pattern = tokens[i];
                 }
                 i++;
             }
 
-            while (i < commands.Length)
+            //Add All Text Files
+            while (i < tokens.Length)
             {
-                result.textFiles.Add(commands[i]);
+                result.textFiles.Add(tokens[i]);
                 i++;
             }
 
@@ -154,7 +173,7 @@ namespace ipmt.Engine
 
         private static void ReadHelp(CommandDescription result)
         {
-            result.opts.Add(OptionType.Help);
+            result.Operation = OperationType.Help;
         }
 
     }
