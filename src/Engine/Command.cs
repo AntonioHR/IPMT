@@ -21,6 +21,9 @@ namespace ipmt.Engine
             } else if(description.Operation == CommandDescription.OperationType.Index)
             {
                 return BuildIndexCommand.BuildFrom(description);
+            } else if(description.Operation == CommandDescription.OperationType.Search)
+            {
+                return IndexedStringMatchCommand.BuildFrom(description);
             }
             throw new NotImplementedException();
         }

@@ -100,7 +100,8 @@
     <Compile Include="Engine\CommandDescription.cs" />
     <Compile Include="Engine\Commands\BuildIndexCommand.cs" />
     <Compile Include="Engine\Commands\MultiTextCommand.cs" />
-    <Compile Include="Engine\Commands\StringMatchCommand.cs" />
+    <Compile Include="Engine\Commands\IndexedStringMatchCommand.cs" />
+    <Compile Include="Engine\Commands\SuffArrayMatch.cs" />
     <Compile Include="Engine\Huffman\HuffmanEncoding.cs" />
     <Compile Include="Engine\Huffman\FrequencyMap.cs" />
     <Compile Include="Engine\Huffman\HuffmanTree.cs" />

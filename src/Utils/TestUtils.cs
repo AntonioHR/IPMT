@@ -40,7 +40,7 @@ namespace ipmt.Utils
             //Console.WriteLine(suffArray.ToStringDebug());
 
             //suffArray.DebugTestComparisons("when");
-            Console.WriteLine(suffArray.MatchesToStringDebug("when"));
+            Console.WriteLine(suffArray.MatchAndPrint("when", false));
         }
 
         public static void WriteToDummyFile(string txt)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace ipmt.Engine.SuffArray
         struct Suffix
         {
             public int start;
+            public int lineStart;
         }
 
         public string text;
@@ -22,17 +24,30 @@ namespace ipmt.Engine.SuffArray
             this.suffixes = new Suffix[text.Length];
         }
 
+        SuffixArray(string text, Suffix[] suffs)
+        {
+            this.text = text;
+            this.suffixes = suffs;
+        }
+
         public static SuffixArray BuildFromText(string text)
         {
             Builder factory = new Builder(text);
             return factory.Build();
         }
-        public string ToStringDebug(int maxChars = 5)
-        {
-            return string.Join("\n", suffixes.Select((x, i) => string.Format("{0}: {1} ({2})", i, 
-                (x.start + maxChars < text.Length? text.Substring(x.start, maxChars)  : text.Substring(x.start)).Replace("\n", "\\n")
-                , x.start)));
-        }
+
+        //public string ToStringDebug(int maxChars = 5)
+        //{
+        //    var suffixesOnePerLine = suffixes.Distinct(suffComp);
+        //    return string.Join("\n", suffixesOnePerLine.Select((x, i) =>
+        //    {
+        //        int lineEnd = text.IndexOf('\n', x.lineStart + 1);
+        //        string line = lineEnd == -1 ? text.Substring(x.lineStart) : text.Substring(x.lineStart, lineEnd);
+
+
+        //        return line;
+        //        }));
+        //}
 
         public string SerializedToString()
         {
@@ -42,12 +57,36 @@ namespace ipmt.Engine.SuffArray
             for (int i = 0; i < suffixes.Length; i++)
             {
                 builder.Append(suffixes[i].start);
+                builder.Append(' ');
+                builder.Append(suffixes[i].lineStart);
                 builder.Append('\n');
             }
             return builder.ToString();
         }
 
-        public List<int> Find(string pat)
+        public static SuffixArray DeserializeFromString(string serialized)
+        {
+            StringReader reader = new StringReader(serialized);;
+            
+            string line = reader.ReadLine();
+            int size = int.Parse(line);
+
+            Suffix[] suffs = new Suffix[size];
+            
+            for (int i = 0; i < size; i++)
+            {
+                line = reader.ReadLine();
+
+                string[] startAndLine = line.Split(' ');
+                suffs[i].start = int.Parse(startAndLine[0]);
+                suffs[i].lineStart = int.Parse(startAndLine[1]);
+            }
+            string text = reader.ReadToEnd();
+
+            return new SuffixArray(text, suffs);
+        }
+
+        private List<Suffix> Find(string pat)
         {
             int n = text.Length;
 
@@ -90,23 +129,41 @@ namespace ipmt.Engine.SuffArray
             }
             int firstNonMatch = left;
 
-            List<int> result = new List<int>(firstNonMatch - firstMatch);
+            var result = new List<Suffix>(firstNonMatch - firstMatch);
             for (int i = firstMatch; i < firstNonMatch; i++)
             {
-                result.Add(suffixes[i].start);
+                result.Add(suffixes[i]);
             }
             return result;
         }
 
-        public string MatchesToStringDebug(string pat)
+        public string MatchAndPrint(string pat, bool justCount)
         {
             var matches = Find(pat);
+
+            if(justCount)
+            {
+                return "" + matches.Count;
+            }
+
+
             int length = pat.Length;
             int maxChars = length + 5;
 
-            return string.Join("\n", matches.OrderBy(x => x).Select((x) => string.Format("({0}): {1}", x,
-                  (x + maxChars < text.Length ? text.Substring(x, maxChars) + "..." : text.Substring(x)).Replace("\n", "\\n")
-                  )));
+            var suffixesOnePerLine = matches.Distinct(suffComp);
+            return string.Join("\n", suffixesOnePerLine.Select((x, i) =>
+            {
+                int lineEnd = text.IndexOf('\n', x.lineStart + 1);
+                string line = lineEnd == -1 ? text.Substring(x.lineStart) : text.Substring(x.lineStart+1, lineEnd - x.lineStart -1);
+
+
+                return line;
+            }));
+
+            //string result = string.Join("\n", matches.OrderBy(x => x).Select((x) => string.Format("({0}): {1}", x,
+            //      (x + maxChars < text.Length ? text.Substring(x, maxChars) + "..." : text.Substring(x))
+            //      )));
+            //return result;
         }
 
         public void DebugTestComparisons(string toCompare)
@@ -141,6 +198,20 @@ namespace ipmt.Engine.SuffArray
             return true;
         }
 
+        static SuffixComparer suffComp = new SuffixComparer();
+        class SuffixComparer : IEqualityComparer<Suffix>
+        {
+            public bool Equals(Suffix x, Suffix y)
+            {
+                return x.lineStart == y.lineStart;
+            }
+
+            public int GetHashCode(Suffix obj)
+            {
+                return obj.lineStart;
+            }
+        }
+
         #region Building from string
         class Builder
         {
@@ -155,12 +226,14 @@ namespace ipmt.Engine.SuffArray
                 Builder builder;
                 public int start;
                 public int[] rank;
+                public int lineStart;
 
-                public SuffixBuilder(Builder builder, int start)
+                public SuffixBuilder(Builder builder, int start, int lineStart)
                 {
                     this.builder = builder;
                     this.start = start;
                     rank = new int[2];
+                    this.lineStart = lineStart;
                 }
 
                 public void InitRanks()
@@ -196,6 +269,7 @@ namespace ipmt.Engine.SuffArray
                 for (int i = 0; i < text.Length; i++)
                 {
                     result.suffixes[i].start = suffs[i].start;
+                    result.suffixes[i].lineStart = suffs[i].lineStart;
                 }
 
                 return result;
@@ -244,9 +318,12 @@ namespace ipmt.Engine.SuffArray
 
             private void CreateSuffs()
             {
+                int line = 0;
                 for (int i = 0; i < text.Length; i++)
                 {
-                    suffs.Add(new SuffixBuilder(this, i));
+                    if (text[i] == '\n')
+                        line = i;
+                    suffs.Add(new SuffixBuilder(this, i, line));
                     suffs[i].InitRanks();
                 }
             }
