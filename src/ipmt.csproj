@@ -105,6 +105,7 @@
     <Compile Include="Engine\Huffman\FrequencyMap.cs" />
     <Compile Include="Engine\Huffman\HuffmanTree.cs" />
     <Compile Include="Engine\ResultHandler.cs" />
+    <Compile Include="Engine\SuffArray\SuffixArray.cs" />
     <Compile Include="Utils\BitArrayUtils.cs" />
     <Compile Include="Utils\BitStringBuilder.cs" />
     <Compile Include="Utils\BitStringReader.cs" />
