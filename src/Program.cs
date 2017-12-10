@@ -15,13 +15,13 @@ namespace ipmt
         static void Main(string[] args)
         {
             //TestUtils.HuffmanTest();
-            TestUtils.HuffmanCompleteTest();
+            //TestUtils.HuffmanCompleteTest();
             //TestUtils.SuffArrayTest();
 
 
-            //CommandDescription c = CommandDescription.ParseFrom(args);
-            //var cmd = Command.BuildFrom(c);
-            //cmd.Execute();
+            CommandDescription c = CommandDescription.ParseFrom(args);
+            var cmd = Command.BuildFrom(c);
+            cmd.Execute();
         }
 
 

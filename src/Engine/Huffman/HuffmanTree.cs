@@ -89,27 +89,7 @@ namespace ipmt.Engine.Huffman
                 bool isLeaf = str[index] == '0';
                 char nodeChar = str[index + 2];
 
-
-                //if (nodeChar == '\n')
-                //{
-                //    if (str[index + 3] == '\r')
-                //    {
-                //        //nodeChar = '\n';
-                //        //resultIndex += 1;
-                //        //index += 1;
-                //    }
-                //    else
-                //    {
-                //        nodeChar = '\r';
-                //        resultIndex -= 2;
-                //        index -= 2;
-                //    }
-                //}
-                    //if (nodeChar == '\r')
-                    //{
-                    //    resultIndex -= 1;
-                    //    index -= 1;
-                    //}
+                
                 Node curr = new Node(isLeaf, nodeChar);
 
 

@@ -34,6 +34,19 @@ namespace ipmt.Engine.SuffArray
                 , x.start)));
         }
 
+        public string SerializedToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(text.Length);
+            builder.Append('\n');
+            for (int i = 0; i < suffixes.Length; i++)
+            {
+                builder.Append(suffixes[i].start);
+                builder.Append('\n');
+            }
+            return builder.ToString();
+        }
+
         public List<int> Find(string pat)
         {
             int n = text.Length;

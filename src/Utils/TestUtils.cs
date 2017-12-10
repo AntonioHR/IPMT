@@ -115,7 +115,6 @@ namespace ipmt.Utils
             Console.WriteLine(realDecodedFromFile);
         }
 
-
         public static void HuffmanCompleteTest()
         {
             string txt = TestUtils.ReadFromFile(Encoding.Unicode, "test.txt");
@@ -156,7 +155,7 @@ namespace ipmt.Utils
 
 
             TestUtils.WriteSeparator("Real Encoded text, read from file");
-            Console.WriteLine(realDecodedFromFile);
+            Console.WriteLine(encodedReadFromFile);
 
             TestUtils.WriteSeparator("Real Decoded text, read from file");
             Console.WriteLine(realDecodedFromFile);

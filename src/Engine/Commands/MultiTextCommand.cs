@@ -26,7 +26,7 @@ namespace ipmt.Engine.Commands
             BeforeExecute();
             foreach (var txtFile in TextFileNames)
             {
-                using (StreamReader sr = new StreamReader(txtFile))
+                using (StreamReader sr = new StreamReader(txtFile, Encoding.UTF7))
                 {
                     String text = sr.ReadToEnd();
                     ExecuteForText(text, txtFile);

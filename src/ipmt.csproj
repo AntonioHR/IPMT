@@ -109,6 +109,7 @@
     <Compile Include="Utils\BitArrayUtils.cs" />
     <Compile Include="Utils\BitStringBuilder.cs" />
     <Compile Include="Utils\BitStringReader.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\MinHeap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

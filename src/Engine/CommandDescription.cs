@@ -77,7 +77,7 @@ namespace ipmt.Engine
             }
 
             //Add Pattern or Pattern File
-            if (i < tokens.Length)
+            if (result.Operation == OperationType.Search && i < tokens.Length)
             {
                 if (result.Contains(OptionType.PatternFile))
                 {
