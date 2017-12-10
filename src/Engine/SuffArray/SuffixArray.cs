@@ -128,6 +128,7 @@ namespace ipmt.Engine.SuffArray
             return true;
         }
 
+        #region Building from string
         class Builder
         {
             SuffixArray result;
@@ -238,5 +239,6 @@ namespace ipmt.Engine.SuffArray
             }
             
         }
+        #endregion
     }
 }

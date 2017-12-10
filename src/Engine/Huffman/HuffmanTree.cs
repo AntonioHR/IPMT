@@ -15,6 +15,10 @@ namespace ipmt.Engine.Huffman
 
         public Node Top;
 
+        public HuffmanTree (Node Top)
+        {
+            this.Top = Top;
+        }
         public HuffmanTree(FrequencyMap map)
         {
 
@@ -43,9 +47,11 @@ namespace ipmt.Engine.Huffman
 
             Stack<Node> stack = new Stack<Node>();
             stack.Push(Top);
-
-            while(stack.Count > 0)
+            
+            int nodeCount = 0;
+            while (stack.Count > 0)
             {
+                nodeCount++;
                 var node = stack.Pop();
 
                 builder.Append(node.SerializeToString());
@@ -58,8 +64,82 @@ namespace ipmt.Engine.Huffman
                     stack.Push(node.left);
                 }
             }
-
+            builder.Insert(0, string.Format("{0}\n", nodeCount));
             return builder.ToString();
+        }
+
+        public static HuffmanTree DeserializeFromString(string str, out int resultIndex)
+        {
+            int eol =  str.IndexOf('\n');
+            int nodeCount = int.Parse(str.Substring(0, eol));
+
+            int charsPerNode = 5;
+            int index = eol + 1;
+            resultIndex = index + nodeCount * charsPerNode;
+
+            
+            Node top = null;
+
+            char prevNodeChar;
+            Stack<Node> parents = new Stack<Node>();
+            while (index < resultIndex)
+            {
+                Debug.Assert(str[index] == '1' || str[index] == '0');
+                //var debug = str.Substring(Math.Max(0, index - charsPerNode), charsPerNode * 3).ToCharArray();
+                bool isLeaf = str[index] == '0';
+                char nodeChar = str[index + 2];
+
+
+                if (nodeChar == '\n')
+                {
+                    if (str[index + 3] == '\r')
+                    {
+                        //nodeChar = '\n';
+                        //resultIndex += 1;
+                        //index += 1;
+                    }
+                    else
+                    {
+                        nodeChar = '\r';
+                        resultIndex -= 2;
+                        index -= 2;
+                    }
+                }
+                    //if (nodeChar == '\r')
+                    //{
+                    //    resultIndex -= 1;
+                    //    index -= 1;
+                    //}
+                Node curr = new Node(isLeaf, nodeChar);
+
+
+                if (top == null)
+                {
+                    top = curr;
+                }
+                else
+                {
+                    Node parent = parents.Peek();
+
+                    if (parent.left == null)
+                        parent.left = curr;
+                    else
+                    {
+                        Debug.Assert(parent.right == null);
+                        parent.right = curr;
+                        parents.Pop();
+                    }
+                }
+
+                if(!isLeaf)
+                {
+                    parents.Push(curr);
+                }
+
+                prevNodeChar = nodeChar;
+                index += charsPerNode;
+            }
+            return new HuffmanTree(top);
         }
 
         internal string Decode(string encoded)
@@ -142,6 +222,13 @@ namespace ipmt.Engine.Huffman
                 this.right = right;
                 this.isLeaf = false;
                 this.totalFreq = left.totalFreq + right.totalFreq;
+            }
+
+            public Node(bool isLeaf, char character)
+            {
+                this.isLeaf = isLeaf;
+                this.character = character;
+                totalFreq = -1;
             }
 
             public String SerializeToString()

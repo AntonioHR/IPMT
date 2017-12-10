@@ -25,6 +25,13 @@ namespace ipmt.Utils
             return new FrequencyMap(result);
         }
 
+        internal static void HuffmanDecodeTest()
+        {
+            var huffmanTree = HuffmanTree.DeserializeFromString(ReadFromFile(Encoding.UTF7, "huffTree.txt"), out int index);
+
+            Console.WriteLine(huffmanTree.SerializeToString());
+        }
+
         internal static void SuffArrayTest()
         {
 

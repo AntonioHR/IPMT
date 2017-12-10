@@ -46,6 +46,7 @@ namespace ipmt.Engine.Huffman
                 builder.Append(ba.ToBitString());
             }
 
+            
             return builder.ToString();
         }
 
