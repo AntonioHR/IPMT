@@ -19,7 +19,8 @@ namespace ipmt.Engine.Commands
         
         protected override void Match(string patt)
         {
-            Utils.TestUtils.WriteSeparator("Patterns for " + patt);
+            if(!justCount)
+                Utils.TestUtils.WriteSeparator("Patterns for " + patt);
             string result = suff.MatchAndPrint(patt, justCount);
             Console.WriteLine(result);
             //throw new NotImplementedException();
