@@ -62,11 +62,11 @@ namespace ipmt.Engine.Commands
 
             List<string> patts = GetAllPatterns(description);
 
-            bool shouldPrint = !description.Contains(CommandDescription.OptionType.Count);
+            bool justCount = description.Contains(CommandDescription.OptionType.Count);
             //var p = new ResultHandler.Params(shouldPrint);
 
 
-            return new SuffArrayMatch(txtFiles, patts, shouldPrint);
+            return new SuffArrayMatch(txtFiles, patts, justCount);
         }
 
     }
