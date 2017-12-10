@@ -30,7 +30,10 @@ namespace ipmt.Utils
 
             //var suffArray = SuffixArray.BuildFromText("banana");
             var suffArray = SuffixArray.BuildFromText(ReadFromFile(Encoding.UTF7));
-            Console.WriteLine(suffArray.ToStringDebug());
+            //Console.WriteLine(suffArray.ToStringDebug());
+
+            //suffArray.DebugTestComparisons("when");
+            Console.WriteLine(suffArray.MatchesToStringDebug("when"));
         }
 
         public static void WriteToDummyFile(string txt)

@@ -34,6 +34,100 @@ namespace ipmt.Engine.SuffArray
                 , x.start)));
         }
 
+        public List<int> Find(string pat)
+        {
+            int n = text.Length;
+
+            int right = text.Length;
+            int left = 0;
+
+            while (left < right)
+            {
+                int mid = (left + right) / 2;
+
+                bool matches = CompareStrToSuff(pat, suffixes[mid], out int cmp);
+
+                //Go back if matches or surpasses
+                if (matches || cmp < 0)
+                {
+                    right = mid;
+                }
+                else
+                {
+                    left = mid + 1;
+                }
+            }
+            int firstMatch = left;
+            right = n;
+            while (right > left)
+            {
+                int mid = (left + right) / 2;
+
+                bool matches = CompareStrToSuff(pat, suffixes[mid], out int cmp);
+
+                //Go forward if matches or precedes
+                if (matches || cmp > 0)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid;
+                }
+            }
+            int firstNonMatch = left;
+
+            List<int> result = new List<int>(firstNonMatch - firstMatch);
+            for (int i = firstMatch; i < firstNonMatch; i++)
+            {
+                result.Add(suffixes[i].start);
+            }
+            return result;
+        }
+
+        public string MatchesToStringDebug(string pat)
+        {
+            var matches = Find(pat);
+            int length = pat.Length;
+            int maxChars = length + 5;
+
+            return string.Join("\n", matches.OrderBy(x => x).Select((x) => string.Format("({0}): {1}", x,
+                  (x + maxChars < text.Length ? text.Substring(x, maxChars) + "..." : text.Substring(x)).Replace("\n", "\\n")
+                  )));
+        }
+
+        public void DebugTestComparisons(string toCompare)
+        {
+            int maxChars = 5;
+            string toShow = string.Join("\n", suffixes.Select((x, i) =>
+            {
+                bool matches = CompareStrToSuff(toCompare, x, out int cmp);
+                return string.Format("{0}: {1} ({2}) -> {3}, Diff: {4}", i,
+                (x.start + maxChars < text.Length ? text.Substring(x.start, maxChars) : text.Substring(x.start)).Replace("\n", "\\n")
+                , x.start, matches? "Match" : "Not a Match", cmp);
+                }));
+            Console.WriteLine(toShow);
+        }
+
+        private bool CompareStrToSuff(string pat, Suffix suff, out int comparison)
+        {
+            int suffLength = text.Length - suff.start;
+
+            for (int i = 0; i < pat.Length && i < suffLength; i++)
+            {
+                int diff = pat[i] - text[suff.start + i];
+
+                if (diff != 0)
+                {
+                    comparison = Math.Sign(diff);
+                    return false;
+                }
+            }
+
+            comparison = Math.Sign(pat.Length - suffLength);
+            return true;
+        }
+
         class Builder
         {
             SuffixArray result;
