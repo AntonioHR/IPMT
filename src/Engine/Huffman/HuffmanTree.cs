@@ -73,7 +73,7 @@ namespace ipmt.Engine.Huffman
             int eol =  str.IndexOf('\n');
             int nodeCount = int.Parse(str.Substring(0, eol));
 
-            int charsPerNode = 5;
+            int charsPerNode = 4;
             int index = eol + 1;
             resultIndex = index + nodeCount * charsPerNode;
 
@@ -85,26 +85,26 @@ namespace ipmt.Engine.Huffman
             while (index < resultIndex)
             {
                 Debug.Assert(str[index] == '1' || str[index] == '0');
-                //var debug = str.Substring(Math.Max(0, index - charsPerNode), charsPerNode * 3).ToCharArray();
+                var debug = str.Substring(Math.Max(0, index - charsPerNode), charsPerNode * 3).ToCharArray();
                 bool isLeaf = str[index] == '0';
                 char nodeChar = str[index + 2];
 
 
-                if (nodeChar == '\n')
-                {
-                    if (str[index + 3] == '\r')
-                    {
-                        //nodeChar = '\n';
-                        //resultIndex += 1;
-                        //index += 1;
-                    }
-                    else
-                    {
-                        nodeChar = '\r';
-                        resultIndex -= 2;
-                        index -= 2;
-                    }
-                }
+                //if (nodeChar == '\n')
+                //{
+                //    if (str[index + 3] == '\r')
+                //    {
+                //        //nodeChar = '\n';
+                //        //resultIndex += 1;
+                //        //index += 1;
+                //    }
+                //    else
+                //    {
+                //        nodeChar = '\r';
+                //        resultIndex -= 2;
+                //        index -= 2;
+                //    }
+                //}
                     //if (nodeChar == '\r')
                     //{
                     //    resultIndex -= 1;

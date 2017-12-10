@@ -24,7 +24,7 @@ namespace ipmt.Utils
             }
             return new FrequencyMap(result);
         }
-
+        
         internal static void HuffmanDecodeTest()
         {
             var huffmanTree = HuffmanTree.DeserializeFromString(ReadFromFile(Encoding.UTF7, "huffTree.txt"), out int index);
@@ -53,7 +53,7 @@ namespace ipmt.Utils
 
         public static string ReadFromDummyFile()
         {
-            using (StreamReader sr = new StreamReader("dummy.txt", Encoding.UTF7 ))
+            using (StreamReader sr = new StreamReader("dummy.txt", Encoding.UTF7))
             {
                 return sr.ReadToEnd();
             }
@@ -78,10 +78,6 @@ namespace ipmt.Utils
             //string txt = "Ramona Lisa says: 'Dominic, you and me are a perfect disaster'";
             string txt = TestUtils.ReadFromFile(Encoding.Unicode, "test.txt");
             FrequencyMap freqMap = new FrequencyMap(txt);
-            //char[] chrs = { 'a', 'b', 'c', 'd', 'e', 'f' };
-            //int[] freqs = { 5, 9, 12, 13, 16, 45 };
-
-            //FrequencyMap freqMap = TestUtils.DummyFrom(chrs, freqs);
 
 
             HuffmanTree tree = new HuffmanTree(freqMap);
@@ -114,6 +110,53 @@ namespace ipmt.Utils
 
             TestUtils.WriteSeparator("Real Decoded text");
             Console.WriteLine(realDecoded);
+
+            TestUtils.WriteSeparator("Real Decoded text, read from file");
+            Console.WriteLine(realDecodedFromFile);
+        }
+
+
+        public static void HuffmanCompleteTest()
+        {
+            string txt = TestUtils.ReadFromFile(Encoding.Unicode, "test.txt");
+            FrequencyMap freqMap = new FrequencyMap(txt);
+
+            HuffmanTree tree = new HuffmanTree(freqMap);
+            HuffmanEncoding encoding = new HuffmanEncoding(tree);
+
+
+            string encodedText = encoding.Encode(txt);
+
+            string serializedTree = tree.SerializeToString();
+
+
+            StringBuilder builder = new StringBuilder(serializedTree.Length + encodedText.Length + 2);
+            builder.Append(serializedTree);
+            builder.Append('\n');
+            builder.Append(encodedText);
+
+            WriteToDummyFile(builder.ToString());
+
+            string readFromFile = ReadFromDummyFile();
+
+            HuffmanTree.DeserializeFromString(readFromFile, out int currIndex);
+
+            string encodedReadFromFile = readFromFile.Substring(currIndex+1);
+
+            string realDecodedFromFile = tree.Decode(encodedReadFromFile);
+
+
+            Console.WriteLine("Encoding");
+            Console.WriteLine(encoding.ToString);
+            Console.WriteLine("Tree");
+            Console.WriteLine(tree.SerializeToString());
+
+            TestUtils.WriteSeparator("Compressed Encoding");
+            Console.WriteLine(encodedText);
+
+
+            TestUtils.WriteSeparator("Real Encoded text, read from file");
+            Console.WriteLine(realDecodedFromFile);
 
             TestUtils.WriteSeparator("Real Decoded text, read from file");
             Console.WriteLine(realDecodedFromFile);

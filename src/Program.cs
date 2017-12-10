@@ -15,8 +15,9 @@ namespace ipmt
         static void Main(string[] args)
         {
             //TestUtils.HuffmanTest();
-            TestUtils.HuffmanDecodeTest();
+            TestUtils.HuffmanCompleteTest();
             //TestUtils.SuffArrayTest();
+
 
             //CommandDescription c = CommandDescription.ParseFrom(args);
             //var cmd = Command.BuildFrom(c);
