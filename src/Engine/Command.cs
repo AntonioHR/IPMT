@@ -84,7 +84,7 @@ namespace ipmt.Engine
 
     class DisplayHelpCommand : Command
     {
-        private static string HelpMessage = " usage:$ pmt [options] pattern textfile [textfile...] \n options \n -e editdistance , --edit editdistance : search with edit distance editdistance\n -p file, --pattern file : search all patterns in file (separated by line break) \n -a algorithm, --algorithm_name algorithm: search with speciffic algorithm(options: kmp, aho(aho corasick), bf(brute force), sel(sellers)\n -c, --count : prints only the amount of matches";
+        private static string HelpMessage = " usage:$ ipmt [command] [options] pattern textfile [textfile...]\n\n Commands\n index: creates an index file for later searching\n  search: Searches for patterns in an index file\n\n options \n -p file, --pattern file : search all patterns in file (separated by line break) \n -c, --count : prints only the amount of matches";
         protected override void Execute()
         {
             Console.WriteLine(HelpMessage);
