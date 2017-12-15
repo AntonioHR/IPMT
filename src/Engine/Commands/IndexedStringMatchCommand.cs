@@ -1,10 +1,6 @@
 ﻿using ipmt.Engine.Huffman;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ipmt.Engine.Commands
 {
@@ -28,19 +24,21 @@ namespace ipmt.Engine.Commands
         }
         public override void ExecuteForText(string text, string fileName)
         {
+            Stopwatch watch = Stopwatch.StartNew();
+            PrepareIndex(text);
+            watch.Stop();
+            times.Add("Reading_Index", watch.Elapsed.TotalSeconds);
 
-            HuffmanTree deserializedTree = HuffmanTree.DeserializeFromString(text, out int currIndex);
-
-            string data = text.Substring(currIndex);
-
-            string decodedData = deserializedTree.Decode(data);
-
-            ReadIndex(decodedData);
-
+            
+            double total = 0;
             foreach (var patt in Patterns)
             {
+                watch.Restart();
                 Match(patt);
+                watch.Stop();
+                total += watch.Elapsed.TotalSeconds;
             }
+            times.Add("Average_Search_Time", total);
 
             //Console.WriteLine(deserializedTree.SerializeToString());
 
@@ -50,6 +48,18 @@ namespace ipmt.Engine.Commands
             //Console.WriteLine(tree.Decode(encoded));
 
             //Match(text);
+        }
+
+        private void PrepareIndex(string text)
+        {
+            int currIndex;
+            HuffmanTree deserializedTree = HuffmanTree.DeserializeFromString(text, out currIndex);
+
+            string data = text.Substring(currIndex);
+
+            string decodedData = deserializedTree.Decode(data);
+
+            ReadIndex(decodedData);
         }
 
         protected abstract void ReadIndex(string serialized);

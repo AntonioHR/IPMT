@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 namespace ipmt.Engine
 {
 
@@ -15,7 +13,7 @@ namespace ipmt.Engine
 
         public enum OptionType
         {
-            PatternFile, Algorithm, Count
+            PatternFile, Algorithm, Count, TimeReport
         }
 
         public enum AlgorithmType
@@ -40,6 +38,7 @@ namespace ipmt.Engine
         public AlgorithmType Algorithm { get; private set; } = AlgorithmType.Default;
         public OperationType Operation { get; private set; }
         public int EditDistance { get; private set; } = 0;
+        public string TimeReportFile { get; private set; }
         public string Patternfile { get; private set; }
         public string Pattern { get; private set; }
         public IEnumerable<string> TextFiles { get { return textFiles.AsEnumerable(); } }
@@ -106,6 +105,9 @@ namespace ipmt.Engine
             {
                 case '-':
                     ReadVerboseOption(ref commands, ref i, ref result);
+                    break;
+                case 't':
+                    ReadTimeReport(ref commands, ref i, result);
                     break;
                 case 'h':
                     ReadHelp(result);
@@ -174,6 +176,13 @@ namespace ipmt.Engine
         private static void ReadHelp(CommandDescription result)
         {
             result.Operation = OperationType.Help;
+        }
+
+        private static void ReadTimeReport(ref string[] commands, ref int i, CommandDescription result)
+        {
+            result.opts.Add(OptionType.TimeReport);
+            //i++;
+            //result.TimeReportFile = commands[i];
         }
 
     }

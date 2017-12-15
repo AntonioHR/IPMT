@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ipmt.Engine.SuffArray
 {
@@ -97,7 +96,8 @@ namespace ipmt.Engine.SuffArray
             {
                 int mid = (left + right) / 2;
 
-                bool matches = CompareStrToSuff(pat, suffixes[mid], out int cmp);
+                int cmp;
+                bool matches = CompareStrToSuff(pat, suffixes[mid], out cmp);
 
                 //Go back if matches or surpasses
                 if (matches || cmp < 0)
@@ -115,7 +115,8 @@ namespace ipmt.Engine.SuffArray
             {
                 int mid = (left + right) / 2;
 
-                bool matches = CompareStrToSuff(pat, suffixes[mid], out int cmp);
+                int cmp;
+                bool matches = CompareStrToSuff(pat, suffixes[mid], out cmp);
 
                 //Go forward if matches or precedes
                 if (matches || cmp > 0)
@@ -171,7 +172,8 @@ namespace ipmt.Engine.SuffArray
             int maxChars = 5;
             string toShow = string.Join("\n", suffixes.Select((x, i) =>
             {
-                bool matches = CompareStrToSuff(toCompare, x, out int cmp);
+                int cmp;
+                bool matches = CompareStrToSuff(toCompare, x, out cmp);
                 return string.Format("{0}: {1} ({2}) -> {3}, Diff: {4}", i,
                 (x.start + maxChars < text.Length ? text.Substring(x.start, maxChars) : text.Substring(x.start)).Replace("\n", "\\n")
                 , x.start, matches? "Match" : "Not a Match", cmp);

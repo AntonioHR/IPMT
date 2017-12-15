@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ipmt.Engine.Huffman
 {
@@ -22,7 +18,8 @@ namespace ipmt.Engine.Huffman
         {
             for (int i = 0; i < text.Length; i++)
             {
-                TryGetValue(text[i], out int c);
+                int c;
+                TryGetValue(text[i], out c);
                 this[text[i]] = c + 1;
             }
         }

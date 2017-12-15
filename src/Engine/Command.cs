@@ -1,17 +1,42 @@
-﻿using System;
+﻿using ipmt.Engine.Commands;
+using ipmt.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ipmt.Engine.Commands;
 
 namespace ipmt.Engine
 {
 
     public abstract class Command
     {
-        public abstract void Execute();
+        public bool hasTimeReport;
+
+        public Dictionary<string, double> times = new Dictionary<string, double>();
+
+        public void Run()
+        {
+            Execute();
+
+            if (hasTimeReport)
+                ReportTime();
+        }
+
+        private void ReportTime()
+        {
+            TestUtils.WriteSeparator("Execution Times");
+            StringBuilder b = new StringBuilder();
+            foreach (var time in times)
+            {
+                b.Append(time.Key);
+                b.Append('\t');
+                b.Append(time.Value);
+                b.Append('\n');
+            }
+            Console.WriteLine(b.ToString());
+        }
+
+        protected abstract void Execute();
 
         public static Command BuildFrom(CommandDescription description)
         {
@@ -20,10 +45,15 @@ namespace ipmt.Engine
                 return new DisplayHelpCommand();
             } else if(description.Operation == CommandDescription.OperationType.Index)
             {
-                return BuildIndexCommand.BuildFrom(description);
+                var result = BuildIndexCommand.BuildFrom(description);
+                result.hasTimeReport = description.Contains(CommandDescription.OptionType.TimeReport);
+                return result;  
+
             } else if(description.Operation == CommandDescription.OperationType.Search)
             {
-                return IndexedStringMatchCommand.BuildFrom(description);
+                var result = IndexedStringMatchCommand.BuildFrom(description);
+                result.hasTimeReport = description.Contains(CommandDescription.OptionType.TimeReport);
+                return result;
             }
             throw new NotImplementedException();
         }
@@ -55,7 +85,7 @@ namespace ipmt.Engine
     class DisplayHelpCommand : Command
     {
         private static string HelpMessage = " usage:$ pmt [options] pattern textfile [textfile...] \n options \n -e editdistance , --edit editdistance : search with edit distance editdistance\n -p file, --pattern file : search all patterns in file (separated by line break) \n -a algorithm, --algorithm_name algorithm: search with speciffic algorithm(options: kmp, aho(aho corasick), bf(brute force), sel(sellers)\n -c, --count : prints only the amount of matches";
-        public override void Execute()
+        protected override void Execute()
         {
             Console.WriteLine(HelpMessage);
         }

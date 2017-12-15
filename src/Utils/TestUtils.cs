@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ipmt.Utils
 {
@@ -27,7 +25,8 @@ namespace ipmt.Utils
         
         internal static void HuffmanDecodeTest()
         {
-            var huffmanTree = HuffmanTree.DeserializeFromString(ReadFromFile(Encoding.UTF7, "huffTree.txt"), out int index);
+            int index;
+            var huffmanTree = HuffmanTree.DeserializeFromString(ReadFromFile(Encoding.UTF7, "huffTree.txt"), out index);
 
             Console.WriteLine(huffmanTree.SerializeToString());
         }
@@ -138,7 +137,8 @@ namespace ipmt.Utils
 
             string readFromFile = ReadFromDummyFile();
 
-            HuffmanTree.DeserializeFromString(readFromFile, out int currIndex);
+            int currIndex;
+            HuffmanTree.DeserializeFromString(readFromFile, out currIndex);
 
             string encodedReadFromFile = readFromFile.Substring(currIndex+1);
 

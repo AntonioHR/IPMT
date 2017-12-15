@@ -3,9 +3,9 @@ using ipmt.Engine.SuffArray;
 using ipmt.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ipmt.Engine.Commands
 {
@@ -15,45 +15,85 @@ namespace ipmt.Engine.Commands
         {
 
         }
-        
+        Stopwatch compressionStopwatch;
+        Stopwatch indexConstructionStopwatch;
 
         public override void ExecuteForText(string text, string fileName)
         {
-            SuffixArray suffArray = SuffixArray.BuildFromText(text);
+            int serializedIndexLength;
+            string encodedText;
+            string serializedTree;
 
-            string fullText = suffArray.SerializedToString() + text;
+            
+            {
+                Console.WriteLine("Building Index");
+                string indexAndText = SerializedIndex(text);
+                serializedIndexLength = indexAndText.Length;
 
+                StartCompressionStopwatch();
 
-            FrequencyMap map = new FrequencyMap(fullText);
-            HuffmanTree tree = new HuffmanTree(map);
-            HuffmanEncoding encoding = new HuffmanEncoding(tree);
+                Console.WriteLine("Building Compression Tree");
 
-            string encoded = encoding.Encode(fullText);
+                HuffmanTree tree = BuildTree(indexAndText);
+                {
+                    Console.WriteLine("Compressing Data");
+                    HuffmanEncoding encoding = new HuffmanEncoding(tree);
+                    encodedText = encoding.Encode(indexAndText);
+                }
+                serializedTree = tree.SerializeToString();
+            }
+
+            long encodedSize = encodedText.Length;
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(tree.SerializeToString());
-            sb.Append(encoded);
+            sb.Append(serializedTree);
+            sb.Append(encodedText);
 
             int fileExtensionStart = fileName.LastIndexOf('.');
             string indexFileName = ((fileExtensionStart == -1) ? fileName : fileName.Substring(0, fileExtensionStart)) + ".idx";
-            
+
             FileUtils.StringToFile(sb.ToString(), indexFileName, Encoding.UTF7);
 
-            //string read = TestUtils.ReadFromFile(Encoding.UTF7, indexFileName);
+            double compressionRate = (double)(encodedText.Length + serializedTree.Length) / serializedIndexLength;
+            Console.WriteLine(compressionRate.ToString("P", CultureInfo.InvariantCulture));
 
-            //HuffmanTree deserializedTree = HuffmanTree.DeserializeFromString(read, out int currIndex);
 
-            //string data = read.Substring(currIndex);
+            compressionStopwatch.Stop();
+            times.Add("SerializationAndCompression", compressionStopwatch.Elapsed.TotalSeconds);
+        }
 
-            //string decodedData = deserializedTree.Decode(data);
+        private static HuffmanTree BuildTree(string indexAndText)
+        {
+            FrequencyMap map = new FrequencyMap(indexAndText);
+            HuffmanTree tree = new HuffmanTree(map);
+            return tree;
+        }
 
-            ////Console.WriteLine(deserializedTree.SerializeToString());
+        private string SerializedIndex(string text)
+        {
+            StartIndexStopwatch();
+            SuffixArray suffArray = SuffixArray.BuildFromText(text);
+            RegisterIndexStopwatch();
 
-            //Console.WriteLine(decodedData);
 
-            ////Utils.TestUtils.WriteSeparator("Decoded");
-            ////Console.WriteLine(tree.Decode(encoded));
+            return suffArray.SerializedToString() + text;
+        }
+
+        private void StartCompressionStopwatch()
+        {
+            compressionStopwatch = Stopwatch.StartNew();
+        }
+
+        private void RegisterIndexStopwatch()
+        {
+            indexConstructionStopwatch.Stop();
+            times.Add("Suffix_Array_Construction", indexConstructionStopwatch.Elapsed.TotalSeconds);
+        }
+
+        private void StartIndexStopwatch()
+        {
+            indexConstructionStopwatch = Stopwatch.StartNew();
         }
 
         public static new BuildIndexCommand BuildFrom(CommandDescription description)

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ipmt.Engine.Commands
 {
@@ -21,7 +19,7 @@ namespace ipmt.Engine.Commands
             TextFileNames = textFileNames;
         }
 
-        public override void Execute()
+        protected override void Execute()
         {
             BeforeExecute();
             foreach (var txtFile in TextFileNames)
